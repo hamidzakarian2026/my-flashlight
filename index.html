@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>چراغ‌قوه</title>
+  <style>
+    body { background-color: #121212; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
+    button { padding: 20px 40px; font-size: 20px; font-weight: bold; border: none; border-radius: 50px; background-color: #00e676; color: #000; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <button id="toggleBtn" onclick="toggleFlashlight()">روشن / خاموش</button>
+  <script>
+    let track = null, isOn = false;
+    async function toggleFlashlight() {
+      try {
+        if (!track) {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: 'environment' } } });
+          track = stream.getVideoTracks()[0];
+        }
+        isOn = !isOn;
+        await track.applyConstraints({ advanced: [{ torch: isOn }] });
+        document.getElementById('toggleBtn').style.backgroundColor = isOn ? '#ff1744' : '#00e676';
+      } catch (err) { alert('خطا: ' + err.message); }
+    }
+  </script>
+</body>
+</html>
